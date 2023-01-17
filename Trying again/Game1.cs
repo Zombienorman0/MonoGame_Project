@@ -13,12 +13,14 @@ namespace Trying_again
         private SpriteBatch _spriteBatch;
         Texture2D cat;
         Texture2D coin;
+        Texture2D background;
         SpriteFont gameFont;
         private Vector2 catDirection = new Vector2();
         private Rectangle catRectangle = new Rectangle();
         private Vector2 coinDirection = new Vector2();
         private Rectangle coinRectangle = new Rectangle();
-        
+        private Rectangle BackgroundRect = new Rectangle();
+
 
         Random rand = new Random();
 
@@ -41,6 +43,7 @@ namespace Trying_again
             base.Initialize();
             catRectangle = cat.Bounds;
             coinRectangle = coin.Bounds;
+            BackgroundRect = background.Bounds;
             score = 0;
         }
 
@@ -51,6 +54,7 @@ namespace Trying_again
             // TODO: use this.Content to load your game content here
             cat = Content.Load<Texture2D>("Smol_Mudkip");
             coin = Content.Load<Texture2D>("Smol_Pikachu");
+            background = Content.Load<Texture2D>("download");
             gameFont = Content.Load<SpriteFont>("Caveat-VariableFont_wght");
         }
 
@@ -152,14 +156,16 @@ namespace Trying_again
 
             
             catRectangle.Offset(catDirection);
-
+            //coinRectangle.Offset(coinDirection);
+            
             if (catRectangle.Intersects(coinRectangle))
             {
-                coinDirection.X = rand.Next(40, 620);
-                coinDirection.Y = rand.Next(40, 520);
+                coinDirection.X = rand.Next(107, 517);
+                coinDirection.Y = rand.Next(137, 490);
 
                 score += 1;
             }
+
 
             coinRectangle.X = (int)coinDirection.X;
             coinRectangle.Y = (int)coinDirection.Y;
@@ -175,7 +181,7 @@ namespace Trying_again
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             Vector2 textCenter = gameFont.MeasureString("hi") / 2f;
-            
+            _spriteBatch.Draw(background, BackgroundRect = new Rectangle(1, 1, 700, 600), Color.White);
             _spriteBatch.Draw(cat, catRectangle.Location.ToVector2(), Color.White);
             _spriteBatch.Draw(coin, coinRectangle.Location.ToVector2(), Color.White);
             _spriteBatch.DrawString(gameFont, "Score: " + score.ToString(), new Vector2(20, 20), Color.Black, 0, textCenter, 2.0f, SpriteEffects.None, 0);
