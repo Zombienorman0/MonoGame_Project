@@ -20,7 +20,7 @@ namespace Trying_again
         private Vector2 coinDirection = new Vector2();
         private Rectangle coinRectangle = new Rectangle();
         private Rectangle BackgroundRect = new Rectangle();
-
+        
 
         Random rand = new Random();
 
@@ -53,9 +53,14 @@ namespace Trying_again
             
             // TODO: use this.Content to load your game content here
             cat = Content.Load<Texture2D>("Smol_Mudkip");
-            coin = Content.Load<Texture2D>("Smol_Pikachu");
+            coin = Content.Load<Texture2D>("Pikachu-Spritesheet");
             background = Content.Load<Texture2D>("download");
             gameFont = Content.Load<SpriteFont>("Caveat-VariableFont_wght");
+        }
+
+        public Texture2D texture
+        {
+            get { return texture; }
         }
 
         protected override void Update(GameTime gameTime)
