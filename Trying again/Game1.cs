@@ -13,8 +13,11 @@ namespace Trying_again
         private SpriteBatch _spriteBatch;
         Texture2D cat;
         Texture2D coin;
+        Texture2D spriteSheet;
         Texture2D background;
         SpriteFont gameFont;
+        CelAnimationSequence PikachuWalking;
+        CelAnimationPlayer animationPlayer;
         private Vector2 catDirection = new Vector2();
         private Rectangle catRectangle = new Rectangle();
         private Vector2 coinDirection = new Vector2();
@@ -39,10 +42,10 @@ namespace Trying_again
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            coinDirection = new Vector2(-1f, -1f);
             base.Initialize();
             catRectangle = cat.Bounds;
-            coinRectangle = coin.Bounds;
+            coinRectangle = spriteSheet.Bounds;
             BackgroundRect = background.Bounds;
             score = 0;
         }
@@ -53,9 +56,14 @@ namespace Trying_again
             
             // TODO: use this.Content to load your game content here
             cat = Content.Load<Texture2D>("Smol_Mudkip");
-            coin = Content.Load<Texture2D>("Pikachu-Spritesheet");
+            //coin = Content.Load<Texture2D>("Pikachu-SpriteSheet__2_-removebg-preview");
             background = Content.Load<Texture2D>("download");
+            spriteSheet = Content.Load<Texture2D>("Pikachu-SpriteSheet__2_-removebg-preview");
             gameFont = Content.Load<SpriteFont>("Caveat-VariableFont_wght");
+
+            animationPlayer = new CelAnimationPlayer();
+            PikachuWalking = new CelAnimationSequence(spriteSheet, 41, 2/8.0f);
+            animationPlayer.Play(PikachuWalking);
         }
 
         public Texture2D texture
@@ -71,6 +79,25 @@ namespace Trying_again
                 Exit();
             //cat movement
             // TODO: Add your update logic here
+
+
+            
+            if (coinRectangle.Top < 0 )
+            {
+                coinDirection.Y = 1;
+            }
+            if ( coinRectangle.Bottom > _graphics.PreferredBackBufferHeight)
+            {
+                coinDirection.Y = -1;
+            }
+            if (coinRectangle.Left < 0 )
+            {
+                coinDirection.X = 1;
+            }
+            if ( coinRectangle.Right > _graphics.PreferredBackBufferWidth)
+            {
+                coinDirection.X = -1;
+            }
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 if (catRectangle.Top > 0)
@@ -161,21 +188,21 @@ namespace Trying_again
 
             
             catRectangle.Offset(catDirection);
-            //coinRectangle.Offset(coinDirection);
+            
             
             if (catRectangle.Intersects(coinRectangle))
             {
-                coinDirection.X = rand.Next(107, 517);
-                coinDirection.Y = rand.Next(137, 490);
+                coinRectangle.X = rand.Next(107, 517);
+                coinRectangle.Y = rand.Next(137, 490);
 
                 score += 1;
             }
 
+            coinRectangle.Offset(coinDirection);
+            //coinRectangle.X = (int)coinDirection.X;
+            //coinRectangle.Y = (int)coinDirection.Y;
 
-            coinRectangle.X = (int)coinDirection.X;
-            coinRectangle.Y = (int)coinDirection.Y;
-
-
+            animationPlayer.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -188,7 +215,9 @@ namespace Trying_again
             Vector2 textCenter = gameFont.MeasureString("hi") / 2f;
             _spriteBatch.Draw(background, BackgroundRect = new Rectangle(1, 1, 700, 600), Color.White);
             _spriteBatch.Draw(cat, catRectangle.Location.ToVector2(), Color.White);
-            _spriteBatch.Draw(coin, coinRectangle.Location.ToVector2(), Color.White);
+            //_spriteBatch.Draw(coin, coinRectangle.Location.ToVector2(), Color.White);
+            animationPlayer.Draw(_spriteBatch, coinRectangle.Location.ToVector2(), SpriteEffects.None);
+            
             _spriteBatch.DrawString(gameFont, "Score: " + score.ToString(), new Vector2(20, 20), Color.Black, 0, textCenter, 2.0f, SpriteEffects.None, 0);
             _spriteBatch.End();
 
