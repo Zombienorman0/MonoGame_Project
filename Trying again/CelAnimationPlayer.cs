@@ -34,7 +34,7 @@ namespace Trying_again
                 celSourceRectangle.X = 0;
                 celSourceRectangle.Y = 0;
                 celSourceRectangle.Width = this.celAnimationSequence.CelWidth;
-                celSourceRectangle.Height = this.celAnimationSequence.CelHeight;
+                celSourceRectangle.Height = this.celAnimationSequence.CelHeight / 2;
             }
         }
 
